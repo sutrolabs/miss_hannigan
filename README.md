@@ -37,6 +37,8 @@ end
 
 miss_hannigan will raise an error if the foreign_key isn't configured appropriately. 
 
+miss_hannigan also assumes you're using ActiveJob with an active queue system in place - that's how orphans get asynchronously destroyed after all. 
+
 ## Why?
 
 Whether you are a Rails expert or just getting started with the framework, you've most likely had to make smart choices on how cascading deletes work in your system. And often in large systems, you're forced with a compromise...
@@ -140,3 +142,7 @@ Feedback
 --------
 [Source code available on Github](https://github.com/sutrolabs/miss_hannigan). Feedback and pull requests are greatly appreciated. Let us know if we can improve this.
 
+
+From
+-----------
+:wave: The folks at [Census](http://getcensus.com) originally put this together. Have data? We'll sync your data warehouse with your CRM and the customer success apps critical to your team. 
