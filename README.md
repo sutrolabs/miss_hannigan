@@ -6,7 +6,7 @@
 
 ## What?
 
-miss_hannigan provides an alternative (and in some cases, better) way to do cascading deletes/destroys in Rails. With it, you can now define a :dependent has_many behavior as :nullify_then_purge which will quickly and synchronously nullify children's relationship to the parent, but then asynchronously purge those child records (the orphans) from the database. 
+miss_hannigan provides an alternative (and in some cases, better) way to do cascading deletes/destroys in Rails. With it, you can now define a :dependent has_many behavior of :nullify_then_purge which will quickly and synchronously nullify (orphan) children from their parent, and then asynchronously purge those child records (the orphans) from the database. 
 
 ```
 class Parent < ApplicationRecord
@@ -87,7 +87,7 @@ For example, you can't automatically do any post-destroy cleanup (e.g. 3rd party
 
 And you can't use this approach if you are using foreign key constraints in your DB: 
 
-![](https://p193.p3.n0.cdn.getcloudapp.com/items/E0uqqdA0/Image+2020-02-25+at+4.18.14+PM.png?v=237c19f4440f03a366944d34eaab7666)
+![](https://github.com/sutrolabs/miss_hannigan/foreign_key_error_example.png)
 
 Another catch is that if you have a Parent -> Child -> Grandchild relationship, and it uses `dependent: :delete_all` down the tree, destroying a Parent, will stop with deleting the Children. Grandchildren won't even get deleted/destroyed. 
 
@@ -127,15 +127,15 @@ end
 
 ## Alternatives 
 
-It's worth noting there are other strategies like allowing your DB handle it's own cascading deletes. For example, adding foreign keys on a Postgres DB from a Rails migration like so: 
+It's worth noting there are other strategies like allowing your DB handle its own cascading deletes. For example, adding foreign keys on a Postgres DB from a Rails migration like so: 
 
 ```
 add_foreign_key "children", "parents", on_delete: :cascade
 ```
 
-Will have Postgres automatically delete children rows when a parent is deleted. But that removes itself from Rails-land where we have other cleanup hooks and tooling we'd like to keep running. 
+Doing that will have Postgres automatically delete children rows when a parent is deleted. But that removes itself from Rails-land where we have other cleanup hooks and tooling we'd like to keep running. 
 
-Another alternative would be to use a tool like acts_as_paranoid to "soft delete" a parent record and later destroy it asynchronously. 
+Another alternative would be to use a pattern like acts_as_paranoid to "soft delete" a parent record and later destroy it asynchronously. 
 
 
 Feedback
