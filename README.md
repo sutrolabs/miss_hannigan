@@ -1,6 +1,7 @@
 # Miss Hannigan
 
 > Daddy Warbucks : You lock the orphans in the closet.
+
 > Miss Hannigan : They love it!
 
 ## What?
@@ -9,7 +10,7 @@ miss_hannigan provides an alternative (and in some cases, better) way to do casc
 
 ```
 class Parent < ApplicationRecord
-    has_many :children, dependent: :delete_then_purge
+    has_many :children, dependent: :nullify_then_purge
 end
 ```
 
@@ -139,6 +140,3 @@ Feedback
 --------
 [Source code available on Github](https://github.com/sutrolabs/miss_hannigan). Feedback and pull requests are greatly appreciated. Let us know if we can improve this.
 
-
-## License
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
