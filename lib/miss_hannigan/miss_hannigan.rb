@@ -3,15 +3,15 @@ module MissHannigan
 
   module ClassMethods
 
-    def has_many(name, scope = nil, **options, &extension)
-      nullify_then_purge = nil
+    def has_many(name, scope = nil, **options, &extension) 
+      nullify_then_purge = false
 
       if options[:dependent] == :nullify_then_purge
         nullify_then_purge = true
         options[:dependent] = :nullify
       end
 
-      reflection = super(name, scope = nil, **options, &extension)
+      reflection = super
 
       if nullify_then_purge
         reflection_details = reflection[name.to_s]
@@ -22,9 +22,12 @@ module MissHannigan
         end
 
         after_destroy do |this_object|
+          # byebug
           CleanupJob.perform_later(reflection_details.klass.to_s, reflection_details.foreign_key)
         end
       end
+
+      return reflection
     end
   end
 

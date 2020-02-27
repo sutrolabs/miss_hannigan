@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     miss_hannigan (0.1.0)
-      rails (>= 4)
+      rails (>= 5.1)
 
 GEM
   remote: https://rubygems.org/
