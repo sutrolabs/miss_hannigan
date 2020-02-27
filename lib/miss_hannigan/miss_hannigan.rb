@@ -37,7 +37,7 @@ module MissHannigan
     def perform(klass_string, parent_foreign_key)
       klass = klass_string.constantize
 
-      klass.where(parent_foreign_key => nil).destroy_all
+      klass.where(parent_foreign_key => nil).find_each(&:destroy)
     end
   end
 end
