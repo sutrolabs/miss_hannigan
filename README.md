@@ -62,7 +62,7 @@ For example, you can't automatically do any post-destroy cleanup (e.g. 3rd party
 
 And you can't use this approach if you are using foreign key constraints in your DB: 
 
-https://share.getcloudapp.com/E0uqqdA0
+![](https://p193.p3.n0.cdn.getcloudapp.com/items/E0uqqdA0/Image+2020-02-25+at+4.18.14+PM.png?v=237c19f4440f03a366944d34eaab7666)
 
 Another catch is that if you have a Parent -> Child -> Grandchild relationship, and it uses `dependent: :delete_all` down the tree, destroying a Parent, will stop with deleting the Children. Grandchildren won't even get deleted/destroyed. 
 
