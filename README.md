@@ -14,6 +14,29 @@ class Parent < ApplicationRecord
 end
 ```
 
+## Installation
+
+1. Add `gem 'miss_hannigan'` to your Gemfile.
+2. Run `bundle install`.
+3. Restart your server
+4. Add the new dependent option to your has_many relationships: 
+
+```
+has_many :children, dependent: :nullify_then_purge
+```
+
+Note: If your `child` has a foreign_key relationship with the `parent`, you'll need to make sure the foreign_key in the `child` allows for nulls. For example, you might have to create migrations like this: 
+
+```
+class RemoveNullKeyConstraint < ActiveRecord::Migration[6.0]
+  def change
+    change_column_null(:children, :parent_id, true)
+  end
+end
+```
+
+miss_hannigan will raise an error if the foreign_key isn't configured appropriately. 
+
 ## Why?
 
 Whether you are a Rails expert or just getting started with the framework, you've most likely had to make smart choices on how cascading deletes work in your system. And often in large systems, you're forced with a compromise...
@@ -112,29 +135,6 @@ Will have Postgres automatically delete children rows when a parent is deleted. 
 
 Another alternative would be to use a tool like acts_as_paranoid to "soft delete" a parent record and later destroy it asynchronously. 
 
-Installation
-------------
-
-1. Add `gem 'miss_hannigan'` to your Gemfile.
-2. Run `bundle install`.
-3. Restart your server
-4. Add the new dependent option to your has_many relationships: 
-
-```
-has_many :children, dependent: :nullify_then_purge
-```
-
-Note: If your `child` has a foreign_key relationship with the `parent`, you'll need to make sure the foreign_key in the `child` allows for nulls. For example, you might have to create migrations like this: 
-
-```
-class RemoveNullKeyConstraint < ActiveRecord::Migration[6.0]
-  def change
-    change_column_null(:children, :parent_id, true)
-  end
-end
-```
-
-miss_hannigan will raise an error if the foreign_key isn't configured appropriately. 
 
 Feedback
 --------
