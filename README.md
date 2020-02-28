@@ -125,6 +125,12 @@ class Parent < ApplicationRecord
 end
 ```
 
+When you specify `dependent: :nullify_then_purge`, `miss_hannigan` also defines a `purgeable` scope on your record, which you can use to look for things that are going to be purged, or more usefully, things that are not set to be purged (so you don't accidentally show deleted data to the user):
+
+```
+surviving_children = Child.where.not.purgeable
+```
+
 ## Alternatives
 
 It's worth noting there are other strategies like allowing your DB handle its own cascading deletes. For example, adding foreign keys on a Postgres DB from a Rails migration like so:
@@ -135,7 +141,7 @@ add_foreign_key "children", "parents", on_delete: :cascade
 
 Doing that will have Postgres automatically delete children rows when a parent is deleted. But that removes itself from Rails-land where we have other cleanup hooks and tooling we'd like to keep running.
 
-Another alternative would be to use a pattern like acts_as_paranoid to "soft delete" a parent record and later destroy it asynchronously.
+Another alternative would be to use a pattern like `acts_as_paranoid` to "soft delete" a parent record and later destroy it asynchronously.
 
 
 Feedback
