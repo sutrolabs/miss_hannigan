@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.version     = MissHannigan::VERSION
   spec.authors     = ["n8", "bradleybuda", "avaynshtok", "sean-lynch", "davehughes", "bjabes"]
   spec.email       = ["nate.kontny@gmail.com"]
-  spec.homepage    = "https://rubygems.org/gems/miss_hannigan"
+  spec.homepage    = "https://github.com/sutrolabs/miss_hannigan"
   spec.summary     = "An alternative way to do cascading deletes in Rails."
   spec.description = "If neither :destroy or :delete_all work for you when deleting children in Rails, maybe this is the right combination for you."
   spec.license     = "MIT"
