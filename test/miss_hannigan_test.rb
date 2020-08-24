@@ -65,19 +65,64 @@ class MissHannigan::Test < ActiveSupport::TestCase
   end
 
   test "has_many nullify_then_purge purges nullified children" do 
-
     Parent.all
 
     parent = Parent.create(name: "parent")
     parent.children.create
 
     assert_difference 'Child.count', -1 do
-      assert_performed_jobs 1 do
+      assert_performed_jobs 2 do
         parent.destroy
         perform_enqueued_jobs
       end
     end
-
   end
 
+  test "has_one works like normal with dependent delete" do
+    parent = nil
+
+    assert_difference "SingletonChildNormal.count", 2 do
+      parent = Parent.create(name: "parent")
+      parent.create_singleton_child_normal!
+
+      second_parent = Parent.create(name: "second")
+      second_parent.create_singleton_child_normal!
+    end
+
+    assert_difference 'SingletonChildNormal.count', -1 do
+      parent.destroy
+    end
+  end
+
+  test "has_one nullify_then_purge nullifies children first" do
+    parent = nil
+
+    assert_difference "SingletonChildOrphan.count", 1 do
+      parent = Parent.create(name: "parent")
+      parent.create_singleton_child_orphan!
+    end
+
+    assert_difference 'SingletonChildOrphan.where(parent: nil).count', 1 do
+      assert_difference 'SingletonChildOrphan.count', 0 do
+        parent.destroy
+      end
+    end
+  end
+
+  test "has_one nullify_then_purge purges nullified children" do
+    Parent.all
+
+    parent = Parent.create(name: "parent")
+    parent.create_singleton_child_normal!
+    parent.create_singleton_child_orphan!
+
+    assert_difference 'SingletonChildNormal.count', -1 do
+      assert_difference 'SingletonChildOrphan.count', -1 do
+        assert_performed_jobs 2 do
+          parent.destroy
+          perform_enqueued_jobs
+        end
+      end
+    end
+  end
 end

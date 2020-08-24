@@ -27,6 +27,22 @@ ActiveRecord::Schema.define(version: 2020_02_27_165020) do
     t.index ["parent_id"], name: "index_normal_children_on_parent_id"
   end
 
+  create_table "singleton_child_normals", force: :cascade do |t|
+    t.string "name"
+    t.integer "parent_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["parent_id"], name: "index_singleton_child_normals_on_parent_id"
+  end
+
+  create_table "singleton_child_orphans", force: :cascade do |t|
+    t.string "name"
+    t.integer "parent_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["parent_id"], name: "index_singleton_child_orphans_on_parent_id"
+  end
+
   create_table "parents", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
